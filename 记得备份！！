@@ -1,0 +1,3 @@
+指令：cp *.db /mnt/sde1/zc/backup/
+
+备份我的数据库（当前目录下的所有db文件）
