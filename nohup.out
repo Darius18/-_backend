@@ -7772,3 +7772,27 @@ Press CTRL+C to quit
  * Restarting with watchdog (inotify)
  * Debugger is active!
  * Debugger PIN: 484-309-512
+ * Detected change in '/root/zc/jiashicang_backend/api/chart_left_right.py', reloading
+ * Detected change in '/root/zc/jiashicang_backend/api/filter.py', reloading
+ * Detected change in '/root/zc/jiashicang_backend/api/options.py', reloading
+ * Detected change in '/root/zc/jiashicang_backend/app.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 484-309-512
+ * Detected change in '/root/zc/jiashicang_backend/api/filter.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 484-309-512
+ * Detected change in '/root/zc/jiashicang_backend/api/chart_left_right.py', reloading
+ * Detected change in '/root/zc/jiashicang_backend/api/chart_left_right.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 484-309-512
+ * Detected change in '/root/zc/jiashicang_backend/api/chart_left_right.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 484-309-512
+ * Detected change in '/root/zc/jiashicang_backend/app.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 484-309-512

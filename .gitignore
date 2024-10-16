@@ -1,1 +1,3 @@
 *.db
+nohup.out
+*.csv
