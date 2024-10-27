@@ -1,14 +1,7 @@
-import sqlite3
 from flask import Blueprint, jsonify
-
+from db import get_db_connection
 # 定义一个 Blueprint
 options_bp = Blueprint('options', __name__)
-
-def get_db_connection():
-    """Connects to the SQLite database."""
-    connection = sqlite3.connect('medical_users.db')
-    connection.row_factory = sqlite3.Row  # 允许通过列名访问字段
-    return connection
 
 @options_bp.route('/api/options', methods=['GET'])
 def get_options():
@@ -21,7 +14,7 @@ def get_options():
         "性别", "慢病分类", "是否吸烟", "是否锻炼", "是否饮酒", 
         "最近就诊时间范围", "服务团队", "社区", "空腹血糖值", 
         "签约团队", "管理机构", "血压类型", "责任医生", 
-        "饮酒类型", "饮酒量", "饮酒频率", "饮食习惯类型"
+        "饮酒类型", "饮酒量", "饮酒频率", "饮食习惯类型","queue_status"
     ]
 
     # 构建 SQL 查询来获取所有字段的值

@@ -1,15 +1,9 @@
 from flask import jsonify, make_response, Blueprint
-import sqlite3
-
+from db import get_db_connection
 
 # 定义一个 Blueprint
 chart_bp = Blueprint('chart', __name__)
 
-def get_db_connection():
-    """Connects to the SQLite database."""
-    connection = sqlite3.connect('medical_users.db')
-    connection.row_factory = sqlite3.Row  # This allows us to access columns by name
-    return connection
 
 def get_age_distribution():
     """Fetches age distribution from the users table in the database."""

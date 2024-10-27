@@ -1,15 +1,9 @@
 from flask import jsonify, make_response, Blueprint, request
-import sqlite3
 from datetime import datetime
+from db import get_db_connection
 
 # 定义一个 Blueprint
 filter_bp = Blueprint('filter', __name__)
-
-def get_db_connection():
-    """Connects to the SQLite database。"""
-    connection = sqlite3.connect('medical_users.db')
-    connection.row_factory = sqlite3.Row  # 允许以字典形式访问列
-    return connection
 
 @filter_bp.route('/api/filter', methods=['POST'])
 def filter_users():
@@ -26,11 +20,9 @@ def filter_users():
         
         # 处理 "最近一次就诊时间" 字段
         if key == "最近一次就诊时间" and isinstance(value, str):
-            # 假设日期字符串格式为 "YYYY/MM/DD-YYYY/MM/DD"
             try:
                 date_range = value.split('-')
                 if len(date_range) == 2:
-                    # 解析并格式化为 YYYY-MM-DD
                     start_time = datetime.strptime(date_range[0].strip(), "%Y/%m/%d").strftime("%Y-%m-%d")
                     end_time = datetime.strptime(date_range[1].strip(), "%Y/%m/%d").strftime("%Y-%m-%d")
                     filters.append("最近一次就诊时间 BETWEEN ? AND ?")
@@ -40,6 +32,18 @@ def filter_users():
                     return make_response(jsonify({"error": "Invalid date range format"}), 400)
             except ValueError:
                 return make_response(jsonify({"error": "Invalid date format"}), 400)
+
+        # 处理身份证号数组
+        elif key == "身份证号" and isinstance(value, list) and value:
+            placeholders = ', '.join(['?'] * len(value))  # 动态生成占位符
+            filters.append(f"身份证号 IN ({placeholders})")
+            params.extend(value)
+
+        # 处理姓名数组
+        elif key == "姓名" and isinstance(value, list) and value:
+            placeholders = ', '.join(['?'] * len(value))  # 动态生成占位符
+            filters.append(f"姓名 IN ({placeholders})")
+            params.extend(value)
         
         # 处理其他字段
         elif value not in [None, ""]:  # 跳过空字符串和 None
@@ -85,7 +89,16 @@ def filter_users():
     if total_num < 100:
         data_query = f"SELECT * FROM users WHERE {where_clause}"
         cursor.execute(data_query, params)
-        data = [dict(row) for row in cursor.fetchall()]  # 将行转换为字典形式
+        data = [dict(row) for row in cursor.fetchall()]
+        
+        # 确保所有字段可序列化
+        for row in data:
+            for key, value in row.items():
+                if isinstance(value, bytes):  # 将 bytes 类型转换为字符串
+                    try:
+                        row[key] = value.decode('utf-8')
+                    except UnicodeDecodeError:
+                        row[key] = "无法解码"  # 或者选择忽略
     
     connection.close()
 
@@ -100,5 +113,8 @@ def filter_users():
     # 如果总条数小于 100，添加 data 字段
     if total_num < 100:
         response_data["data"] = data
+
+    # 打印返回的数据以进行调试
+    print(response_data, flush=True)
 
     return make_response(jsonify(response_data), 200)
